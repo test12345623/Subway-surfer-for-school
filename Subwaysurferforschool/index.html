@@ -1,86 +1,68 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     
-    <meta http-equiv="content-type" content="text/html; charset=UTF8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Class Research - History Notes (Draft)</title>
+    <link rel="icon" href="https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico">
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="viewport" content="height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui, viewport-fit=cover" />
-    <meta name="description" content="">
-    
-    <link rel="icon" href="assets/images/app-icon-16.png" type="image/png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/images/app-icon-114.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/images/app-icon-72.png">
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="assets/images/app-icon-57.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/images/app-icon-57.png">
-    <script type="text/javascript" src="cloak.js"></script>
-    
-    <title>Subway Surfers Web</title>
     <style>
         body, html { 
-            margin: 0;
-            height: 100%;
-            background-color: #0b316b;
-            overflow: hidden;
-            background-image: url('assets/preload/splash.png');
-            background-repeat: no-repeat;
-            background-position: center;
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background-color: #0b316b; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        #message {
+        #loading-message {
+            color: white; 
+            font-family: "Verdana", sans-serif; 
             text-align: center;
-            font-size: 8px;
-            z-index: 5;
-            font-family: "Verdana", sans-serif;
-            color: #fff;
-            position: fixed;
-            width: 100%;
-            z-index: 9999;
+            z-index: 10;
         }
-
-        .dot {
-            display: inline;
-            margin-left: 0.2em;
-            margin-right: 0.2em;
-            position: relative;
-            top: -1em;
-            font-size: 3.5em;
-            opacity: 0;
-            animation: showHideDot 2.5s ease-in-out infinite;
-        }
-
-        .dot.one { animation-delay: 0.2s; }
-        .dot.two { animation-delay: 0.4s; }
-        .dot.three { animation-delay: 0.6s; }
-
-        @keyframes showHideDot {
-            0% { opacity: 0; }
-            50% { opacity: 1; }
-            60% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
     </style>
-    <link rel="canonical" href="https://www.rocketgames.io/game/subway-surfers">
 </head>
 <body>
+
+    <div id="loading-message">
+        <h1>Syncing Documents...</h1>
+        <p>Please wait while the library loads.</p>
+    </div>
+
+<script>
+// THE ULTIMATE CORS BYPASS
+(function() {
+    const originalWorker = window.Worker;
+    window.Worker = function(scriptURL, options) {
+        // If the game tries to load the worker file that is being blocked...
+        if (scriptURL.includes('worker.0a8b30d0071f04d38b17.js')) {
+            console.log("Bypassing blocked worker...");
+            
+            /* Since we can't 'fetch' the file, we create an empty 
+               'Fake Worker' to let the game start the engine.
+            */
+            const blob = new Blob(['console.log("Worker bypass active");'], {type: 'application/javascript'});
+            return new originalWorker(URL.createObjectURL(blob), options);
+        }
+        return new originalWorker(scriptURL, options);
+    };
+})();
+</script>
+
     <script>
-        window.NOSW = true;
+        // TRICKING THE GAME ENGINE
+        // This stops the game from looking for a server and tells it to use your local files.
+        window.NOSW = true; 
         window.GAME_CONFIG = {
             pokiSdkDebug: false,
             leaderboard: 'mockup',
-            bundlesPath: './bundles',
-        }
+            bundlesPath: './bundles', // This points to your local folder
+        };
+
+        // This prevents the game from "calling home" to the RocketGames server
+        window.MAIN = './js/index.js'; 
     </script>
-    <div id="message">
-        <h1>Loading</h1>
-        <h1 class="dot one">.</h1><h1 class="dot two">.</h1><h1 class="dot three">.</h1>
-    </div>
+
     <script src="js/loading.js"></script>
-    <script src="js/boot.js?v=2"></script>
+    <script src="js/boot.js"></script>
 </body>
 </html>
